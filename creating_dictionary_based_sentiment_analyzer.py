@@ -1,5 +1,5 @@
 #%%
-# Import the libraries
+# Importing the libraries
 import pandas as pd 
 from IPython import display
 
@@ -8,11 +8,11 @@ pd.set_option('display.max_colwidth', None)
 
 #%%
 # Loading the small_corpus dataset created in the "Creating dataset" milestone
-reviews_dataset = pd.read_csv('/Users/jumper/transformers/amazon_reviews/small_corpus.csv')
+reviews_dataset = pd.read_csv('small_corpus.csv')
 reviews_dataset.head()
 
 # %%
-# Tokenize the dataset and  the words within
+# Tokenizing the dataset and  the words within
 ## 1- Using Treebankword Tokenizer
 from nltk import TreebankWordTokenizer
 from string import punctuation
@@ -33,7 +33,7 @@ reviews_dataset['casual_tokens'] = reviews_dataset['rev_text_lower'].apply(lambd
 reviews_dataset[['reviewText', 'tb_tokens', 'casual_tokens']].sample(3)
 
 # %%
-# Words normalization
+# appling the Words normalization
 ## Stemmatization
 from nltk.stem.porter import PorterStemmer
 
@@ -47,6 +47,7 @@ from nltk.stem import WordNetLemmatizer
 from nltk.tag import pos_tag
 from nltk.corpus import wordnet as wn, sentiwordnet as swn
 
+# Converting the penn tags to wordnet ones
 def penn_to_wn(tag):
     if tag.startswith('J'):
         return wn.ADJ
@@ -60,6 +61,7 @@ def penn_to_wn(tag):
 
 lemmatizer  = WordNetLemmatizer()
 
+# Defining a method to get the lemmas
 def get_lemmas(tokens):
     lemmas = []
     for token in tokens:
@@ -75,7 +77,6 @@ reviews_dataset[['reviewText', 'stem_tokens', 'lemmas']].sample(3)
 
 # %%
 # Define the sentiment score predictor
-
 def get_sentiment_score(tokens):
     score = 0
     tags = pos_tag(tokens)
@@ -89,21 +90,18 @@ def get_sentiment_score(tokens):
         # most common set:
         synset = synsets[0]
         swn_synset = swn.senti_synset(synset.name())
-
         score += (swn_synset.pos_score() - swn_synset.neg_score())
-
     return score  
 
 # %%
-# Test negative score
+# Testing the negative score
 swn.senti_synset(wn.synsets("awful", wn.ADJ)[0].name()).neg_score()
 
 # %%
-# Test positive score
+# Testing the positive score
 swn.senti_synset(wn.synsets("good", wn.ADJ)[0].name()).pos_score()
 
 # %%
-# Test the score using the get_sentiment_score methode
+# Testing the score using the sentiment predictor methode
 reviews_dataset['sentiment_score'] = reviews_dataset['lemmas'].apply(lambda tokens : get_sentiment_score(tokens))
 reviews_dataset[['reviewText', 'lemmas', 'sentiment_score']].sample(5)
-# %%
