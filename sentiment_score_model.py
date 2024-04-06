@@ -1,5 +1,5 @@
 #%%
-# Import libraries 
+# Importing the libraries 
 from nltk.tag import pos_tag 
 from nltk.corpus import sentiwordnet as swn, wordnet as wn
 from nltk.stem import WordNetLemmatizer 
@@ -13,7 +13,7 @@ import numpy as np
 
 #%%
 # 1 - Using sentiwornet scoring model
-# Get wordnet tags
+# Getting the wordnet tags
 def get_wordnet_tags(tag):
     """
         Convert between the PennTreebank tags to simple Wordnet tags
@@ -28,7 +28,7 @@ def get_wordnet_tags(tag):
         return wn.ADV
     return None
 
-# Get the sentiment score with sentiwordnet
+# Getting the sentiment score with sentiwordnet
 def get_senti_score_of_reviews(text):
     """
         This method returns the sentiment score of a given text using SentiWordNet sentiment scores.
@@ -62,11 +62,12 @@ def get_senti_score_of_reviews(text):
     return (total_score + len(raw_sentence)) * 100
 
 #%%
-# Reading the dataset
+# Setting the screen dimensions for a better display
 pd.set_option('display.max_column', None)
 pd.set_option('display.max_colwidth', None)
 
-reviews = pd.read_csv('/Users/jumper/transformers/amazon_reviews/small_corpus.csv')
+# Loading the small corpus dataset creating in the creating dataset milestone
+reviews = pd.read_csv('small_corpus.csv')
 reviews.head()
 
 #%%
